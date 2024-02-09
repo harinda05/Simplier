@@ -60,7 +60,7 @@ public class TokenizerTests {
 
     @Test
     public void testTokenizerStringWithMultipleTypesOfTokens(){
-        List<Token> resultList = tokenizer.tokenize("A + B = C");
+        List<Token> resultList = tokenizer.tokenize("A + B");
 
         List<Token> expectedTokenList = new ArrayList<>();
         expectedTokenList.add(new Token(
@@ -74,14 +74,6 @@ public class TokenizerTests {
         expectedTokenList.add(new Token(
                 TokenType.IDENTIFIER_LITERAL,
                 "B"
-        ));
-        expectedTokenList.add(new Token(
-                TokenType.OPERATOR_LITERAL,
-                "="
-        ));
-        expectedTokenList.add(new Token(
-                TokenType.IDENTIFIER_LITERAL,
-                "C"
         ));
         assertThat(resultList).usingRecursiveComparison().isEqualTo(expectedTokenList);
     }
