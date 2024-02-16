@@ -3,6 +3,7 @@ package org.simpiler.handlers.parser;
 import org.simpiler.handlers.tokenizer.Token;
 import org.simpiler.handlers.tokenizer.TokenType;
 
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -40,11 +41,26 @@ public class Parser {
         }
     }
 
+    private Expression parseTerm(){
+        String[] term_operators = new String[] {"*", "/"};
+        Expression left = parseLiteral();
+        while(Arrays.asList(term_operators).contains(peek().getText())){
+            String op_token = consume().getText();
+            Expression right = parseLiteral();
+            left = new BinaryOp(left, op_token, right);
+        }
+        return left;
+    }
+
     private Expression parseExpression(List<Token> tokenList, int pos){
-        return new BinaryOp(
-                parseLiteral(),
-                consume().getText(),
-                parseLiteral()
-        );
+        String[] exp_operators = new String[] {"+", "-"};
+        Expression left = parseTerm();
+        while(Arrays.asList(exp_operators).contains(peek().getText())){
+            String op_token = consume().getText();
+            Expression right = parseTerm();
+            left = new BinaryOp(left, op_token, right);
+        }
+        return left;
     }
 }
+

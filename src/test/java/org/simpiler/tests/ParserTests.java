@@ -1,6 +1,7 @@
 package org.simpiler.tests;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.simpiler.handlers.parser.BinaryOp;
@@ -17,7 +18,7 @@ public class ParserTests {
     Tokenizer tokenizer;
     Parser parser;
 
-    @BeforeAll
+    @BeforeEach
     public void setup(){
         tokenizer = new Tokenizer();
         parser = new Parser();
@@ -33,6 +34,78 @@ public class ParserTests {
                 new Literal<>(2)
         );
 
+        assertThat(resultExp).usingRecursiveComparison().isEqualTo(expectedExp);
+    }
+
+    @Test
+    public void testParserMultiple(){
+        Expression resultExp = parser.parse(tokenizer.tokenize("1 + 2 + 3"));
+
+        BinaryOp left = new BinaryOp(new Literal<>(1),
+                "+",
+                new Literal<>(2));
+
+        Expression expectedExp = new BinaryOp(
+                left,
+                "+",
+                new Literal<>(3)
+        );
+
+        assertThat(resultExp).usingRecursiveComparison().isEqualTo(expectedExp);
+    }
+
+    @Test
+    public void testParserMultiple2(){
+        Expression resultExp = parser.parse(tokenizer.tokenize("1 + 2 - 5"));
+
+        BinaryOp left = new BinaryOp(new Literal<>(1),
+                "+",
+                new Literal<>(2));
+
+        Expression expectedExp = new BinaryOp(
+                left,
+                "-",
+                new Literal<>(5)
+        );
+
+        assertThat(resultExp).usingRecursiveComparison().isEqualTo(expectedExp);
+    }
+
+    // 1 + (2 * 5)
+    @Test
+    public void testParserTestMultiplication(){
+        Expression resultExp = parser.parse(tokenizer.tokenize("1 + 2 * 5"));
+
+        BinaryOp right = new BinaryOp(new Literal<>(2),
+                "*",
+                new Literal<>(5));
+
+        Expression expectedExp = new BinaryOp(
+                new Literal<>(1),
+                "+",
+                right
+        );
+
+        assertThat(resultExp).usingRecursiveComparison().isEqualTo(expectedExp);
+    }
+
+    @Test
+    public void testParserTestMultiplication2(){
+        Expression resultExp = parser.parse(tokenizer.tokenize("1 * 5 + 2 * 5"));
+
+        BinaryOp left = new BinaryOp(new Literal<>(1),
+                "*",
+                new Literal<>(5));
+
+        BinaryOp right = new BinaryOp(new Literal<>(2),
+                "*",
+                new Literal<>(5));
+
+        Expression expectedExp = new BinaryOp(
+                left,
+                "+",
+                right
+        );
         assertThat(resultExp).usingRecursiveComparison().isEqualTo(expectedExp);
     }
 
