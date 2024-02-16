@@ -1,8 +1,8 @@
 package org.simpiler.tests;
 
-
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.simpiler.handlers.tokenizer.Token;
 import org.simpiler.handlers.tokenizer.TokenType;
 import org.simpiler.handlers.tokenizer.Tokenizer;
@@ -11,12 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TokenizerTests {
 
     Tokenizer tokenizer;
 
-    @Before
+    @BeforeAll
     public void setup(){
         tokenizer = new Tokenizer();
     }
